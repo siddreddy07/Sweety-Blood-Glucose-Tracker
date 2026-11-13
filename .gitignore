@@ -1,0 +1,19 @@
+# Markdown files (plans, notes, assignment) stay local
+*.md
+
+# Dependencies
+node_modules/
+
+# Env files (keep the example)
+.env
+.env.*
+!.env.example
+
+# Build output
+.next/
+dist/
+out/
+
+# Logs / OS
+*.log
+.DS_Store
