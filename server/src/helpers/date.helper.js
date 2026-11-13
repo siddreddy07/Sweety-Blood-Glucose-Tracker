@@ -12,3 +12,21 @@ export function isValidDate(str) {
   const d = new Date(str);
   return !isNaN(d) && d.toISOString().slice(0, 10) === str;
 }
+
+// "2026-10-15" -> { from: "2026-10-01", to: "2026-10-15" }
+export function getMonthToDateRange(date) {
+  return { from: date.slice(0, 8) + "01", to: date };
+}
+
+// "2026-10-15" -> { from: "2026-09-01", to: "2026-09-30" } (whole previous month)
+export function getPreviousMonthRange(date) {
+  const year = Number(date.slice(0, 4));
+  const month = Number(date.slice(5, 7)); // 1-12
+
+  const prevYear = month === 1 ? year - 1 : year;
+  const prevMonth = month === 1 ? 12 : month - 1;
+  const lastDay = new Date(Date.UTC(year, month - 1, 0)).getUTCDate();
+
+  const mm = String(prevMonth).padStart(2, "0");
+  return { from: `${prevYear}-${mm}-01`, to: `${prevYear}-${mm}-${lastDay}` };
+}

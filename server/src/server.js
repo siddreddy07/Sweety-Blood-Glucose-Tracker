@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import readingsRoutes from "./routes/readings.routes.js";
+import reportsRoutes from "./routes/reports.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/readings", readingsRoutes);
+app.use("/reports", reportsRoutes);
 
 await connectDB();
 
