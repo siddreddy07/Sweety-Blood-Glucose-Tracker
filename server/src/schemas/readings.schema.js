@@ -6,6 +6,8 @@ export async function createReadingsTable(pool) {
       reading_date DATE NOT NULL,
       slot TEXT NOT NULL,
       value INTEGER NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       UNIQUE (user_id, reading_date, slot)
     )
   `);

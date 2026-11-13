@@ -54,7 +54,7 @@ export async function createReading(userId, date, slot, value) {
 
 export async function updateReading(id, userId, date, slot, value) {
   const result = await pool.query(
-    `UPDATE readings SET reading_date = $3, slot = $4, value = $5
+    `UPDATE readings SET reading_date = $3, slot = $4, value = $5, updated_at = NOW()
      WHERE id = $1 AND user_id = $2
      RETURNING ${columns}`,
     [id, userId, date, slot, value]
