@@ -1,4 +1,3 @@
-import { SLOTS } from "../constants.js";
 import { getToday, isValidDate, getMonthToDateRange, getPreviousMonthRange } from "../helpers/date.helper.js";
 import { getStats } from "../services/report.service.js";
 import { getReadings } from "../services/reading.service.js";
@@ -22,8 +21,6 @@ export async function dailyReport(req, res) {
 
     const stats = await getStats(req.userId, date, date);
     const readings = await getReadings(req.userId, date);
-    // show in the order of the day: morning -> dinner
-    readings.sort((a, b) => SLOTS.indexOf(a.slot) - SLOTS.indexOf(b.slot));
 
     res.json({ from: date, to: date, ...stats, readings });
   } catch (err) {
