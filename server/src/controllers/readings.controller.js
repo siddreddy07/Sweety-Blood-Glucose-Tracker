@@ -1,6 +1,7 @@
 import { MAX_READINGS_PER_DAY } from "../constants.js";
 import { validateReading } from "../helpers/reading.helper.js";
 import { isValidDate } from "../helpers/date.helper.js";
+import { isValidId } from "../helpers/id.helper.js";
 import {
   getReadings,
   getReadingById,
@@ -55,10 +56,10 @@ export async function addReading(req, res) {
 
 export async function editReading(req, res) {
   try {
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const { reading_date, slot, value } = req.body;
 
-    const existing = Number.isInteger(id) ? await getReadingById(id, req.userId) : null;
+    const existing = isValidId(id) ? await getReadingById(id, req.userId) : null;
     if (!existing) {
       return res.status(404).json({ error: "Reading not found." });
     }
@@ -90,8 +91,8 @@ export async function editReading(req, res) {
 
 export async function removeReading(req, res) {
   try {
-    const id = Number(req.params.id);
-    const deleted = Number.isInteger(id) ? await deleteReading(id, req.userId) : false;
+    const id = req.params.id;
+    const deleted = isValidId(id) ? await deleteReading(id, req.userId) : false;
     if (!deleted) {
       return res.status(404).json({ error: "Reading not found." });
     }
