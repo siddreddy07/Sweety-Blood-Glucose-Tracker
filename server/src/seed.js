@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import { pool, connectDB } from "./config/db.js";
-import { SLOTS } from "./constants.js";
 import { findUserByEmail, createUser } from "./services/user.service.js";
 import { createReading } from "./services/reading.service.js";
 
-// 3 sample days of values (one per slot), repeated over the last 40 days
-const sampleValues = [
-  [95, 150, 135, 140],
-  [102, 160, 128, 155],
-  [88, 145, 142, 130],
+// daysAgo: 0 = today, 1 = yesterday ...
+const sampleReadings = [
+  { daysAgo: 0, slot: "Morning (fasting)", value: 95 },
+  { daysAgo: 0, slot: "After lunch", value: 135 },
+  { daysAgo: 1, slot: "Morning (fasting)", value: 102 },
+  { daysAgo: 1, slot: "After breakfast", value: 160 },
+  { daysAgo: 2, slot: "After dinner", value: 130 },
 ];
 
 await connectDB();
@@ -23,14 +24,11 @@ if (!user) {
 // clear old demo readings so running the seed twice is fine
 await pool.query("DELETE FROM readings WHERE user_id = $1", [user.id]);
 
-for (let i = 0; i < 40; i++) {
+for (const r of sampleReadings) {
   const day = new Date();
-  day.setDate(day.getDate() - i);
+  day.setDate(day.getDate() - r.daysAgo);
   const date = day.toISOString().slice(0, 10);
-
-  for (let s = 0; s < SLOTS.length; s++) {
-    await createReading(user.id, date, SLOTS[s], sampleValues[i % 3][s]);
-  }
+  await createReading(user.id, date, r.slot, r.value);
 }
 
 console.log("Seeded demo user: demo@sweety.com / demo1234");
